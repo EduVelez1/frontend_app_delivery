@@ -5,19 +5,18 @@ import 'package:delivery_app/src/models/response_api.dart';
 import 'package:delivery_app/src/models/user.dart';
 import 'package:delivery_app/src/provider/users_provider.dart';
 import 'package:delivery_app/src/utils/my_snackbar.dart';
+import 'package:delivery_app/src/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class RegisterController {
+class ClientUpdateController {
   late BuildContext context;
 
-  TextEditingController emailController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
   TextEditingController lastnameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController confirmPasswordController = new TextEditingController();
 
   UsersProvider usersProvider = new UsersProvider();
 
@@ -27,67 +26,67 @@ class RegisterController {
   ProgressDialog? _progressDialog;
   bool isEnable = true;
 
+  SharedPref _sharedPref = new SharedPref();
+  User user = new User(roles: []);
+
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    await usersProvider.init(context);
     _progressDialog = ProgressDialog(context: context);
+    user = User.fromJson(await _sharedPref.read('user'));
+    await usersProvider.init(context);
+
+    nameController.text = user.name!;
+    lastnameController.text = user.lastname!;
+    phoneController.text = user.phone!;
+
+    refresh();
   }
 
-  void register() async {
-    String email = emailController.text.trim();
+  void update() async {
     String name = nameController.text;
     String lastname = lastnameController.text;
     String phone = phoneController.text.trim();
-    String password = passwordController.text.trim();
-    String confirPassword = confirmPasswordController.text.trim();
 
-    if (email.isEmpty ||
-        name.isEmpty ||
-        lastname.isEmpty ||
-        phone.isEmpty ||
-        password.isEmpty ||
-        confirPassword.isEmpty) {
+    if (name.isEmpty || lastname.isEmpty || phone.isEmpty) {
       MySnackbar.show(context, 'Debes ingresar todos los campos');
       return;
     }
 
-    if (password != confirPassword) {
-      MySnackbar.show(context, 'Las contraseñas no coinciden');
-      return;
-    }
-
-    if (imageFile == null) {
-      MySnackbar.show(context, 'Seleccione una imagen');
-      return;
-    }
+    // if (imageFile == null) {
+    //   MySnackbar.show(context, 'Seleccione una imagen');
+    //   return;
+    // }
 
     _progressDialog?.show(max: 100, msg: 'Cargando imagen');
 
     isEnable = false;
 
-    User user = new User(
-        email: email,
+    User userActualizado = new User(
+        id: user.id,
         name: name,
         lastname: lastname,
         phone: phone,
-        password: password,
+        image: user.image,
+        //password: password,
         roles: []);
 
     Stream stream =
-        await usersProvider.createWithImage(user, imageFile ?? imageFile!);
-    stream.listen((res) {
+        await usersProvider.update(userActualizado, imageFile ?? null);
+    stream.listen((res) async {
       _progressDialog?.close();
       // ResponseApi responseApi = await usersProvider.create(user);
       ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
       // print(responseApi.toJson());
 
-      MySnackbar.show(context, responseApi.message.toString());
+      // MySnackbar.show(context, responseApi.message.toString());
+      Fluttertoast.showToast(msg: responseApi.message.toString());
 
       if (responseApi.success) {
-        Future.delayed(Duration(seconds: 3), () {
-          Navigator.pushReplacementNamed(context, 'login');
-        });
+        user = await usersProvider.getById(userActualizado.id!);
+        _sharedPref.save('user', user.toJson());
+
+        Navigator.pushReplacementNamed(context, 'client/products/list');
       } else {
         isEnable = true;
       }

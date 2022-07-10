@@ -21,7 +21,7 @@ class LoginController {
     if (user.sessionToken != null) {
       if (user.roles.length > 1) {
         Navigator.pushReplacementNamed(context, 'roles');
-                // Navigator.pushReplacementNamed(context, 'client/products/list');
+        // Navigator.pushReplacementNamed(context, 'client/products/list');
 
       } else {
         Navigator.pushReplacementNamed(context, user.roles[0].route.toString());

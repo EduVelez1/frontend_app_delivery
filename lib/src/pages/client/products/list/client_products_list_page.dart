@@ -103,6 +103,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
               ],
             )),
         ListTile(
+          onTap: _con.goToUpdatePage,
           title: Text('Editar perfil'),
           trailing: Icon(Icons.edit_outlined),
         ),
@@ -110,11 +111,13 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
           title: Text('Mis pedidos'),
           trailing: Icon(Icons.shopping_cart_outlined),
         ),
-        _con.user.roles.length > 1 ? ListTile(
-          onTap: _con.goToRoles,
-          title: Text('Seleccionar rol'),
-          trailing: Icon(Icons.person_outline),
-        ) : Container(),
+        _con.user.roles.length > 1
+            ? ListTile(
+                onTap: _con.goToRoles,
+                title: Text('Seleccionar rol'),
+                trailing: Icon(Icons.person_outline),
+              )
+            : Container(),
         ListTile(
           onTap: _con.logout,
           title: Text('Cerrar sesion'),

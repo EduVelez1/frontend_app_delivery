@@ -24,6 +24,14 @@ class StoresListController {
     key.currentState?.openDrawer();
   }
 
+  void goToCategoryCreate() {
+    Navigator.pushNamed(context, 'stores/categories/create');
+  }
+
+  void goToProductsCreate() {
+    Navigator.pushNamed(context, 'stores/products/create');
+  }
+
   void goToRoles() {
     Navigator.pushReplacementNamed(context, 'roles');
   }

@@ -4,25 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class StoresOrdersListPage extends StatefulWidget {
-  const StoresOrdersListPage({ Key? key }) : super(key: key);
+  const StoresOrdersListPage({Key? key}) : super(key: key);
 
   @override
   State<StoresOrdersListPage> createState() => _StoresOrdersListPageState();
 }
 
 class _StoresOrdersListPageState extends State<StoresOrdersListPage> {
-
   StoresListController _con = new StoresListController();
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       _con.init(context, refresh);
-     });
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +30,13 @@ class _StoresOrdersListPageState extends State<StoresOrdersListPage> {
         leading: _menuDrawer(),
         backgroundColor: MyColors.primaryColor,
       ),
-      drawer:_drawer(),
+      drawer: _drawer(),
       body: Center(
         child: Text('stores'),
       ),
-      
     );
   }
+
   Widget _menuDrawer() {
     return GestureDetector(
       onTap: _con.openDrawer,
@@ -102,6 +100,16 @@ class _StoresOrdersListPageState extends State<StoresOrdersListPage> {
               ],
             )),
         ListTile(
+          onTap: _con.goToCategoryCreate,
+          title: Text('Crear categoria'),
+          trailing: Icon(Icons.list_alt),
+        ),
+        ListTile(
+          onTap: _con.goToProductsCreate,
+          title: Text('Crear producto'),
+          trailing: Icon(Icons.list_sharp),
+        ),
+        ListTile(
           title: Text('Editar perfil'),
           trailing: Icon(Icons.edit_outlined),
         ),
@@ -109,21 +117,23 @@ class _StoresOrdersListPageState extends State<StoresOrdersListPage> {
           title: Text('Mis pedidos'),
           trailing: Icon(Icons.shopping_cart_outlined),
         ),
-       _con.user.roles.length > 1 ? ListTile(
-          onTap: _con.goToRoles,
-          title: Text('Seleccionar rol'),
-          trailing: Icon(Icons.person_outline),
-        ) : Container(),
+        _con.user.roles.length > 1
+            ? ListTile(
+                onTap: _con.goToRoles,
+                title: Text('Seleccionar rol'),
+                trailing: Icon(Icons.person_outline),
+              )
+            : Container(),
         ListTile(
           onTap: _con.logout,
           title: Text('Cerrar sesion'),
           trailing: Icon(Icons.power_settings_new),
-        )
+        ),
       ],
     ));
   }
 
-     void refresh() {
+  void refresh() {
     setState(() {});
   }
 }

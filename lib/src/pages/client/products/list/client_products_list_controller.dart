@@ -18,11 +18,15 @@ class ClienteProductsListController {
     _sharedPref.logout(context);
   }
 
- void openDrawer() {
+  void openDrawer() {
     key.currentState?.openDrawer();
   }
 
-   void goToRoles() {
+  void goToUpdatePage() {
+    Navigator.pushNamed(context, 'client/update');
+  }
+
+  void goToRoles() {
     Navigator.pushReplacementNamed(context, 'roles');
   }
 }
