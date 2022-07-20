@@ -1,3 +1,8 @@
+import 'package:delivery_app/src/pages/client/address/create/client_address_create_controller.dart';
+import 'package:delivery_app/src/pages/client/address/create/client_address_create_page.dart';
+import 'package:delivery_app/src/pages/client/address/list/client_address_list_page.dart';
+import 'package:delivery_app/src/pages/client/address/map/client_address_map_page.dart';
+import 'package:delivery_app/src/pages/client/orders/create/client_orders_create_page.dart';
 import 'package:delivery_app/src/pages/client/products/list/client_products_list_page.dart';
 import 'package:delivery_app/src/pages/client/update/client_update_page.dart';
 import 'package:delivery_app/src/pages/delivery/orders/list/delivery_orders_list_page.dart';
@@ -26,7 +31,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Delivery App',
-      theme: ThemeData(primaryColor: MyColors.primaryColor),
+      theme: ThemeData(
+          primaryColor: MyColors.primaryColor,
+          appBarTheme: AppBarTheme(elevation: 0)),
       debugShowCheckedModeBanner: false,
       initialRoute: 'login',
       routes: {
@@ -36,6 +43,14 @@ class _MyAppState extends State<MyApp> {
         'client/products/list': (BuildContext context) =>
             const ClientProductsListPage(),
         'client/update': (BuildContext context) => const ClientUpdatePage(),
+        'client/orders/create': (BuildContext context) =>
+            const ClientOrdersCreatePage(),
+        'client/address/create': (BuildContext context) =>
+            const ClientAddressCreatePage(),
+        'client/address/list': (BuildContext context) =>
+            const ClientAddressListPage(),
+        'client/address/map': (BuildContext context) =>
+            const ClientAddressMapPage(),
         'stores/orders/list': (BuildContext context) =>
             const StoresOrdersListPage(),
         'stores/categories/create': (BuildContext context) =>
